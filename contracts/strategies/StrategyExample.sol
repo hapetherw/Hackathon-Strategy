@@ -6,11 +6,12 @@
  */
 pragma solidity ^0.6.12;
 
-import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 // import { ICurve2Pool } from "../../interfaces/ICurve2Pool.sol";
 // import { ICurveGauge } from "../../interfaces/ICurveGauge.sol";
-import { InitializableAbstractStrategy } from "./InitializableAbstractStrategy.sol";
+import {InitializableAbstractStrategy} from "./InitializableAbstractStrategy.sol";
+
 // import { StableMath } from "../libraries/StableMath.sol";
 
 contract StrategyExample is InitializableAbstractStrategy {
@@ -39,8 +40,11 @@ contract StrategyExample is InitializableAbstractStrategy {
         address _rewardTokenAddress,
         address[] calldata _assets,
         address[] calldata _pTokens
+    )
+        external
         //uint256 _supportedAssetIndex,
-    ) external initializer {
+        initializer
+    {
         //require(_supportedAssetIndex < _assets.length, " ");
         InitializableAbstractStrategy._initialize(
             _platformAddress,
@@ -52,7 +56,6 @@ contract StrategyExample is InitializableAbstractStrategy {
         // curvePool = ICurve2Pool(platformAddress);
         // curveGauge = ICurveGauge(_crvGaugeAddress);
         //supportedAssetIndex = _supportedAssetIndex;
-
     }
 
     // /**
@@ -67,21 +70,23 @@ contract StrategyExample is InitializableAbstractStrategy {
     //     emit ThresholdChanged(lpAssetThreshold);
     // }
 
-
     /**
      * @dev Check if an asset/collateral is supported.
      * @param _asset    Address of the asset
      * @return bool     Whether asset is supported
      */
-    function supportsCollateral(
-        address _asset
-    ) public view override returns (bool) {
-        if (assetToPToken[_asset] != address(0)
+    function supportsCollateral(address _asset)
+        public
+        view
+        override
+        returns (bool)
+    {
+        if (
+            assetToPToken[_asset] != address(0)
             // && _getPoolCoinIndex(_asset) == supportedAssetIndex
         ) {
-                return true;
-            }
-        else {
+            return true;
+        } else {
             return false;
         }
     }
@@ -90,7 +95,7 @@ contract StrategyExample is InitializableAbstractStrategy {
      * @dev Approve the spending of all assets by their corresponding pool tokens,
      *      if for some reason is it necessary.
      */
-    function safeApproveAllTokens() override onlyOwner external {
+    function safeApproveAllTokens() external override onlyOwner {
         //TO-DO
     }
 
@@ -124,10 +129,12 @@ contract StrategyExample is InitializableAbstractStrategy {
      * @param _asset Address of asset to withdraw
      * @param _amount Amount of asset to withdraw
      */
-    function withdrawToVault(
-        address _asset,
-        uint256 _amount
-    ) external override onlyOwner nonReentrant {
+    function withdrawToVault(address _asset, uint256 _amount)
+        external
+        override
+        onlyOwner
+        nonReentrant
+    {
         _withdraw(vaultAddress, _asset, _amount);
     }
 
@@ -136,27 +143,28 @@ contract StrategyExample is InitializableAbstractStrategy {
      * @param _recipient Address to receive withdrawn asset
      * @param _asset Asset type deposited into this strategy contract
      */
-    function collectInterest(
-        address _recipient,
-        address _asset
-    ) external override onlyVault nonReentrant returns (
-        address interestAsset,
-        uint256 interestEarned
-    ) {
+    function collectInterest(address _recipient, address _asset)
+        external
+        override
+        onlyVault
+        nonReentrant
+        returns (address interestAsset, uint256 interestEarned)
+    {
         //TO-DO:
     }
 
     /**
      * @dev Collect accumulated CRV and send to Vault.
      */
-    function collectRewardToken() external override onlyVault nonReentrant returns (
-        uint256 rewardEarned
-    )
+    function collectRewardToken()
+        external
+        override
+        onlyVault
+        nonReentrant
+        returns (uint256 rewardEarned)
     {
         //TO-DO:
     }
-
-
 
     /**
      * @dev Get the total asset value held in the platform
@@ -165,8 +173,8 @@ contract StrategyExample is InitializableAbstractStrategy {
      */
     function checkBalance(address _asset)
         public
-        override
         view
+        override
         returns (uint256 balance)
     {
         require(supportsCollateral(_asset), "Unsupported collateral");
@@ -199,12 +207,7 @@ contract StrategyExample is InitializableAbstractStrategy {
      * @return interestEarned
                The amount of asset/collateral earned as interest
      */
-    function checkRewardEarned()
-        public
-        view
-        override
-        returns (uint256)
-    {
+    function checkRewardEarned() public view override returns (uint256) {
         //TO-DO:
         return 0;
     }
@@ -231,7 +234,10 @@ contract StrategyExample is InitializableAbstractStrategy {
      * @param _asset Address of the asset
      * @param _pToken Address of the corresponding platform token (i.e. 2CRV)
      */
-    function _abstractSetPToken(address _asset, address _pToken) override internal {
+    function _abstractSetPToken(address _asset, address _pToken)
+        internal
+        override
+    {
         IERC20 asset = IERC20(_asset);
         IERC20 pToken = IERC20(_pToken);
         // To change

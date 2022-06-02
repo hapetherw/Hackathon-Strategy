@@ -8,13 +8,19 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/SafeERC20Upgradeable.sol
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 import "../../interfaces/IStrategy.sol";
+
 /**
  * @title USDs Strategies abstract contract
  * @author Sperax Foundation
  */
-abstract contract InitializableAbstractStrategy is IStrategy, Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeable {
+abstract contract InitializableAbstractStrategy is
+    IStrategy,
+    Initializable,
+    OwnableUpgradeable,
+    ReentrancyGuardUpgradeable
+{
     using SafeERC20Upgradeable for IERC20Upgradeable;
-    using SafeMathUpgradeable for uint;
+    using SafeMathUpgradeable for uint256;
 
     event PTokenAdded(address indexed _asset, address _pToken);
     event PTokenRemoved(address indexed _asset, address _pToken);
@@ -128,8 +134,6 @@ abstract contract InitializableAbstractStrategy is IStrategy, Initializable, Own
         emit PTokenRemoved(asset, pToken);
     }
 
-
-
     /**
      * @dev Provide support for asset by passing its pToken address.
      *      Add to internal mappings and execute the platform specific,
@@ -157,9 +161,12 @@ abstract contract InitializableAbstractStrategy is IStrategy, Initializable, Own
      * @param _asset    Address of the asset
      * @return bool     Whether asset is supported
      */
-    function supportsCollateral(
-        address _asset
-    ) external view virtual override returns (bool);
+    function supportsCollateral(address _asset)
+        external
+        view
+        virtual
+        override
+        returns (bool);
 
     /***************************************
                  Abstract
@@ -175,10 +182,7 @@ abstract contract InitializableAbstractStrategy is IStrategy, Initializable, Own
      * @param _asset               Address for the asset
      * @param _amount              Units of asset to deposit
      */
-    function deposit(
-        address _asset,
-        uint256 _amount
-    ) external virtual override;
+    function deposit(address _asset, uint256 _amount) external virtual override;
 
     /**
      * @dev Withdraw an amount of asset from the platform.
@@ -197,32 +201,27 @@ abstract contract InitializableAbstractStrategy is IStrategy, Initializable, Own
      * @param _asset             Address of the asset
      * @param _amount            Units of asset to withdraw
      */
-    function withdrawToVault(
-        address _asset,
-        uint256 _amount
-    ) external virtual;
+    function withdrawToVault(address _asset, uint256 _amount) external virtual;
 
     /**
      * @dev Withdraw the interest earned of asset from the platform.
      * @param _recipient         Address to which the asset should be sent
      * @param _asset             Address of the asset
      */
-    function collectInterest(
-        address _recipient,
-        address _asset
-    ) external virtual override returns(
-        address interestAsset,
-        uint256 interestAmt
-    );
+    function collectInterest(address _recipient, address _asset)
+        external
+        virtual
+        override
+        returns (address interestAsset, uint256 interestAmt);
 
     /**
      * @dev Collect accumulated reward token and send to Vault.
      */
-    function collectRewardToken() external virtual override returns(
-        uint256 rewardEarned
-    );
-
-
+    function collectRewardToken()
+        external
+        virtual
+        override
+        returns (uint256 rewardEarned);
 
     /**
      * @dev Get the total asset value held in the platform.
@@ -268,6 +267,4 @@ abstract contract InitializableAbstractStrategy is IStrategy, Initializable, Own
     function _abstractSetPToken(address _asset, address _pToken)
         internal
         virtual;
-
-
 }
