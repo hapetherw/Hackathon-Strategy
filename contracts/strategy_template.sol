@@ -8,20 +8,11 @@ pragma solidity ^0.6.12;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-// import { ICurve2Pool } from "../../interfaces/ICurve2Pool.sol";
-// import { ICurveGauge } from "../../interfaces/ICurveGauge.sol";
-import {InitializableAbstractStrategy} from "./InitializableAbstractStrategy.sol";
-
-// import { StableMath } from "../libraries/StableMath.sol";
+import {InitializableAbstractStrategy} from "../../library/InitializableAbstractStrategy.sol";
 
 contract StrategyExample is InitializableAbstractStrategy {
     // using StableMath for uint256;
     using SafeERC20 for IERC20;
-
-    //uint256 internal supportedAssetIndex;
-
-    // ICurveGauge public curveGauge;
-    // ICurve2Pool public curvePool;
 
     /**
      * Initializer for setting up strategy internal state. This overrides the
@@ -244,27 +235,6 @@ contract StrategyExample is InitializableAbstractStrategy {
         asset.safeApprove(platformAddress, uint256(-1));
         pToken.safeApprove(platformAddress, uint256(-1));
     }
-
-    // /**
-    //  * @dev Calculate the total platform token balance (i.e. 2CRV) that exist in
-    //  * this contract or is staked in the Gauge (or in other words, the total
-    //  * amount platform tokens we own).
-    //  */
-    // function _getTotalPTokens()
-    //     internal
-    //     view
-    //     returns (
-    //         uint256 contractPTokens,
-    //         uint256 gaugePTokens,
-    //         uint256 totalPTokens
-    //     )
-    // {
-    //     contractPTokens = IERC20(assetToPToken[assetsMapped[0]]).balanceOf(
-    //         address(this)
-    //     );
-    //     gaugePTokens = curveGauge.balanceOf(address(this));
-    //     totalPTokens = contractPTokens.add(gaugePTokens);
-    // }
 
     /**
      * @dev Get the index of the coin in 2Pool
